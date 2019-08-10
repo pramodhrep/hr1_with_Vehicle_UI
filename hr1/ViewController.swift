@@ -11,7 +11,7 @@ import UIKit
 class ViewController: UIViewController {
 
     var aEmp : [Employee] = []
-    
+    private let dsVehicleMake = ["Audi","BMW","Bentley","Cadilliac","Dodge","Ford","Hyundai","Kia", "Pointiac", "Subaru", "Tesla"]
     @IBOutlet weak var txtName: UITextField!
     
     @IBOutlet weak var txtHours: UITextField!
@@ -32,9 +32,16 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var txtModel: UITextField!
     
+    @IBOutlet var pvVehicleMake: UIPickerView!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        pvVehicleMake.dataSource = self
+        pvVehicleMake.delegate = self
+        txtAge.text = "18"
+        txtRate.isEnabled = false
+        txtHours.isEnabled = false
         // Do any additional setup after loading the view.
     }
 
@@ -162,6 +169,56 @@ class ViewController: UIViewController {
         
     }
     
+    @IBAction func addStepper(_ sender: UIStepper) {
+        txtAge.text = String(Int(sender.value))
+    }
     
+    @IBAction func vehicleSwitch(_ sender: UISwitch) {
+        if(sender.isOn == true){
+            txtMake.isEnabled = true
+            txtModel.isEnabled = true
+            pvVehicleMake.isUserInteractionEnabled = true
+        }else{
+            txtMake.text = ""
+            txtModel.text = ""
+            
+            txtMake.isEnabled = false
+            txtModel.isEnabled = false
+            pvVehicleMake.isUserInteractionEnabled = false
+        }
+    }
+    
+    @IBAction func scWorktype(_ sender: UISegmentedControl) {
+        if(sender.selectedSegmentIndex == 0){
+            txtSalary.isEnabled = true
+            txtBonus.isEnabled = true
+            txtRate.isEnabled = false
+            txtHours.isEnabled = false
+        }else if(sender.selectedSegmentIndex == 1){
+            txtSalary.isEnabled = false
+            txtBonus.isEnabled = false
+            txtRate.isEnabled = true
+            txtHours.isEnabled = true
+        }
+    }
+}
+
+extension ViewController : UIPickerViewDelegate, UIPickerViewDataSource {
+    
+    func numberOfComponents(in pvMake: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pvMake: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return dsVehicleMake.count
+    }
+    
+    func pickerView(_ pvMake: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return dsVehicleMake[row]
+    }
+    
+    func pickerView(_ pvMake: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        txtMake.text = dsVehicleMake[row]
+    }
 }
 
